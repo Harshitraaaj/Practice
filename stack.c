@@ -12,16 +12,6 @@ if(top==max){
     top+=1;
     stack_array[top]=data;
 }
-int pop(){
-    if(top==-1){
-        printf("stackunderflow\n");
-        exit(1);
-    }
-    int value;
-    value=stack_array[top];
-    top-=1;
-    return value;
-}
 void print(){
     if(top==-1){
         printf("stackunderflow\n");
@@ -33,6 +23,17 @@ void print(){
     }
     printf("\n");
 }
+int pop(){
+    if(top==-1){
+        printf("stackunderflow\n");
+        exit(1);
+    }
+    int value;
+    value=stack_array[top];
+    top-=1;
+    return value;
+}
+
 int main(){
     int data;
     push(2);
