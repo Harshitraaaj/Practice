@@ -3,7 +3,8 @@
 struct Node
 {
     int data;
-    struct Node *link;
+    struct Node *llink;
+    struct Node *rlink;
 };
 /*counting how many nodes exist in LINKLIST
 void count_of_nodes(struct node *head)
@@ -11,8 +12,8 @@ void count_of_nodes(struct node *head)
     int count = 0;
     if (head == NULL)
         printf("Linked list is empty");
-    struct node *ptr = NULL;
-    while (ptr != NULL)
+    struct node *ptr->rlink = NULL;
+    while (ptr->rlink!= NULL)
     {
         count++;
         ptr = ptr->link;
@@ -21,51 +22,62 @@ void count_of_nodes(struct node *head)
 }
 
 */
-void linkedlisttraversal(struct Node *ptr)
+void linkedlisttraversal(struct Node *temp)
 {
-    while (ptr != NULL)
+    while (temp != NULL)
     {
-        printf("Element: %d\n", ptr->data);
-        ptr = ptr->link;
+        printf("Element: %d\n", temp->data);
+        temp = temp->rlink;
     }
 }
-//case 1: inserting at first
-struct Node *insertatfirst(struct Node *head, int data)
+// case 1: deleting first node
+struct Node *deleteatfirst(struct Node *head)
 {
+    int value;
     struct Node *ptr = (struct Node *)malloc(sizeof(struct Node));
-    ptr->link = head;
-    ptr->data = data;
+    ptr = head;
+    value = ptr->data;
+    head = head->rlink;
+    head->llink=NULL;
+    printf("deleted data is : %d", value);
+    free(ptr);
+   
 }
-//case 2: inserting at index
+
+/*case 2: inserting at index
 struct Node *insertatIndex(struct Node *head, int data, int index)
 {
     struct Node *ptr = (struct Node *)malloc(sizeof(struct Node));
-    struct Node *p = head;
-    int i = 0;
-    while (i != index - 1)
-    {
-        p = p->link;
-        i++;
-    }
     ptr->data = data;
-    ptr->link = p->link;
-    p->link = ptr;
+    struct Node *temp = head;
+    int i;
+    for (i = 1; i != index - 1; i++)
+    {
+        temp = temp->rlink;
+    }
+    ptr->llink = temp;
+    ptr->rlink = temp->rlink;
+    temp->rlink->llink = ptr;
+    temp->rlink = ptr;
     return head;
 }
-// case 3: inserting at the end 
+
+// case 3: inserting at the end
 struct Node *insertatend(struct Node *head, int data)
 {
     struct Node *ptr = (struct Node *)malloc(sizeof(struct Node));
     ptr->data = data;
-    struct Node *p = head;
-    while (p->link != NULL)
+    struct Node *temp = head;
+    while (temp->rlink != NULL)
     {
-        p = p->link;
+        temp = temp->rlink;
     }
-    p->link = ptr;
-    ptr->link = NULL;
+    temp->rlink = ptr;
+    ptr->llink = temp;
+    ptr->rlink = NULL;
     return head;
 }
+
 //case 4 :inserting node after node
 struct Node *insertafternode(struct Node *head,struct Node *previousnode, int data)
 {
@@ -73,9 +85,9 @@ struct Node *insertafternode(struct Node *head,struct Node *previousnode, int da
     ptr->data = data;
     ptr->link=previousnode->link;
     previousnode->link=ptr;
-    
+
     return head;
-}
+}*/
 
 int main()
 {
@@ -89,24 +101,28 @@ int main()
     third = (struct Node *)malloc(sizeof(struct Node));
 
     head->data = 7;
-    head->link = second;
+    head->llink = NULL;
+    head->rlink = second;
 
     second->data = 9;
-    second->link = third;
+    second->llink = head;
+    second->rlink = third;
 
     third->data = 13;
-    third->link = NULL;
-    printf("\nlinkedlist before insertion\n");
+    third->llink = second;
+    third->rlink = NULL;
+    printf("\nlinkedlist before deletion\n");
     linkedlisttraversal(head);
-    // head = insertatfirst(head, 56);
-   
-    head = insertatend(head, 89);
-    
-    printf("\nlinked list after insertion\n");
-   // head=insertafternode(head,second,45);
-    //head=insertatIndex(head, 56, 1);
+    printf("\nlinked list after deletion\n");
 
-    
+    // head = insertatfirst(head, 56);
+    head = deleteatfirst(head);
+
+    // head=insertatIndex(head, 56, 2);
+    //  head= insertatend(head, 89);
+
+    // head=insertafternode(head,second,45);
+
     linkedlisttraversal(head);
 
     return 0;
